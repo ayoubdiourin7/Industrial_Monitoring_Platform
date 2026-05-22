@@ -1,6 +1,9 @@
 from contextlib import asynccontextmanager
+from pathlib import Path
 
 from fastapi import Depends, FastAPI
+from fastapi.responses import FileResponse
+from fastapi.staticfiles import StaticFiles
 from sqlalchemy import desc, distinct, select
 from sqlalchemy.orm import Session
 
@@ -18,6 +21,13 @@ async def lifespan(_app: FastAPI):
 
 
 app = FastAPI(title="Mini Industrial Monitoring Platform", lifespan=lifespan)
+static_dir = Path(__file__).resolve().parent.parent / "static"
+app.mount("/static", StaticFiles(directory=static_dir), name="static")
+
+
+@app.get("/", include_in_schema=False)
+def dashboard() -> FileResponse:
+    return FileResponse(static_dir / "index.html")
 
 
 @app.get("/health")

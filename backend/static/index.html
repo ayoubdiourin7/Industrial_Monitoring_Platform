@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Industrial Monitoring Dashboard</title>
+    <link rel="stylesheet" href="/static/styles.css" />
+  </head>
+  <body>
+    <div class="page-shell">
+      <header class="hero">
+        <div>
+          <p class="eyebrow">Mini Industrial Monitoring Platform</p>
+          <h1>Live machine health dashboard</h1>
+          <p class="hero-copy">
+            Monitor sensor readings, spot anomalies, and inspect one machine in
+            detail from a single screen.
+          </p>
+        </div>
+        <div class="hero-status">
+          <span id="connection-dot" class="status-dot status-live"></span>
+          <div>
+            <p class="status-label">Backend status</p>
+            <strong id="connection-label">Connecting...</strong>
+          </div>
+        </div>
+      </header>
+
+      <main class="dashboard-grid">
+        <section class="panel panel-wide">
+          <div class="panel-heading">
+            <div>
+              <p class="panel-kicker">Overview</p>
+              <h2>Current machine status</h2>
+            </div>
+            <div class="pill-row">
+              <span class="pill">Polling every 3s</span>
+              <span id="fleet-pill" class="pill">0 machines</span>
+            </div>
+          </div>
+          <div id="machine-cards" class="card-grid"></div>
+        </section>
+
+        <section class="panel">
+          <div class="panel-heading">
+            <div>
+              <p class="panel-kicker">Focus</p>
+              <h2>Machine temperature trend</h2>
+            </div>
+            <label class="machine-select-label" for="machine-select">Machine</label>
+          </div>
+          <div class="chart-toolbar">
+            <select id="machine-select"></select>
+            <span id="selected-machine-status" class="pill">No data</span>
+          </div>
+          <canvas id="trend-chart" width="720" height="280"></canvas>
+        </section>
+
+        <section class="panel">
+          <div class="panel-heading">
+            <div>
+              <p class="panel-kicker">Alerts</p>
+              <h2>Recent anomalies</h2>
+            </div>
+          </div>
+          <div id="anomaly-list" class="stack-list"></div>
+        </section>
+      </main>
+    </div>
+
+    <script src="/static/app.js"></script>
+  </body>
+</html>

@@ -5,6 +5,7 @@ Starter scaffold for a small industrial AI-style monitoring system:
 - Python simulator publishes machine metrics over MQTT
 - Mosquitto brokers the messages
 - FastAPI consumes MQTT data and stores readings in PostgreSQL
+- FastAPI also serves a simple dashboard UI
 - Docker Compose runs the stack
 
 ## Run
@@ -12,6 +13,11 @@ Starter scaffold for a small industrial AI-style monitoring system:
 ```bash
 docker compose up --build
 ```
+
+Open:
+
+- Dashboard: `http://localhost:8000/`
+- API docs: `http://localhost:8000/docs`
 
 ## API
 
