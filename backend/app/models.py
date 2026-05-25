@@ -11,8 +11,8 @@ class Reading(Base):
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
     machine_id: Mapped[str] = mapped_column(String(50), index=True)
-    temperature: Mapped[float] = mapped_column(Float)
     vibration: Mapped[float] = mapped_column(Float)
-    pressure: Mapped[float] = mapped_column(Float)
+    acoustic: Mapped[float] = mapped_column(Float)
+    power_draw: Mapped[float] = mapped_column(Float)
     is_anomaly: Mapped[bool]
     timestamp: Mapped[datetime] = mapped_column(DateTime(timezone=True), index=True)

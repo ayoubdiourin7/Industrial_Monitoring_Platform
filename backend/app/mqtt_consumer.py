@@ -16,7 +16,11 @@ MQTT_TOPIC = os.getenv("MQTT_TOPIC", "factory/+/metrics")
 
 
 def is_anomaly(payload: dict) -> bool:
-    return payload["temperature"] > 90 or payload["vibration"] > 4.5
+    return (
+        payload["vibration"] > 4.5
+        or payload["acoustic"] > 80
+        or payload["power_draw"] > 22
+    )
 
 
 def wait_for_database() -> None:
@@ -44,9 +48,9 @@ def on_message(_client: mqtt.Client, _userdata, message: mqtt.MQTTMessage) -> No
 
     reading = Reading(
         machine_id=payload["machine_id"],
-        temperature=payload["temperature"],
         vibration=payload["vibration"],
-        pressure=payload["pressure"],
+        acoustic=payload["acoustic"],
+        power_draw=payload["power_draw"],
         is_anomaly=is_anomaly(payload),
         timestamp=timestamp.astimezone(timezone.utc),
     )

@@ -6,9 +6,9 @@ from pydantic import BaseModel
 class ReadingOut(BaseModel):
     id: int
     machine_id: str
-    temperature: float
     vibration: float
-    pressure: float
+    acoustic: float
+    power_draw: float
     is_anomaly: bool
     timestamp: datetime
 

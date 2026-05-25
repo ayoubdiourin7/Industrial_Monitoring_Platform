@@ -21,7 +21,7 @@ function formatTime(isoTimestamp) {
 function statusForReading(reading) {
   if (!reading) return { label: "No data", className: "status-warning" };
   if (reading.is_anomaly) return { label: "Alert", className: "status-alert" };
-  if (reading.temperature > 82 || reading.vibration > 3.5) {
+  if (reading.vibration > 3.5 || reading.acoustic > 72 || reading.power_draw > 18) {
     return { label: "Warning", className: "status-warning" };
   }
   return { label: "OK", className: "status-ok" };
@@ -51,16 +51,16 @@ function renderMachineCards(readings) {
           </div>
           <div class="metric-row">
             <div class="metric">
-              <span class="metric-label">Temperature</span>
-              <strong class="metric-value">${reading.temperature.toFixed(1)}°C</strong>
-            </div>
-            <div class="metric">
               <span class="metric-label">Vibration</span>
-              <strong class="metric-value">${reading.vibration.toFixed(1)}</strong>
+              <strong class="metric-value">${reading.vibration.toFixed(1)} mm/s</strong>
             </div>
             <div class="metric">
-              <span class="metric-label">Pressure</span>
-              <strong class="metric-value">${reading.pressure.toFixed(1)} bar</strong>
+              <span class="metric-label">Acoustic</span>
+              <strong class="metric-value">${reading.acoustic.toFixed(1)} dB</strong>
+            </div>
+            <div class="metric">
+              <span class="metric-label">Power Draw</span>
+              <strong class="metric-value">${reading.power_draw.toFixed(1)} kW</strong>
             </div>
           </div>
           <p class="machine-timestamp">Updated ${formatTime(reading.timestamp)}</p>
@@ -109,9 +109,9 @@ function renderAnomalies(readings) {
             <span class="machine-status status-alert">Alert</span>
           </div>
           <div class="anomaly-metrics">
-            <span>Temp ${reading.temperature.toFixed(1)}°C</span>
-            <span>Vibration ${reading.vibration.toFixed(1)}</span>
-            <span>Pressure ${reading.pressure.toFixed(1)} bar</span>
+            <span>Vibration ${reading.vibration.toFixed(1)} mm/s</span>
+            <span>Acoustic ${reading.acoustic.toFixed(1)} dB</span>
+            <span>Power ${reading.power_draw.toFixed(1)} kW</span>
           </div>
           <p class="machine-timestamp">${formatTime(reading.timestamp)}</p>
         </article>
@@ -131,7 +131,7 @@ function drawChart(readings) {
   }
 
   const ordered = [...readings].reverse();
-  const values = ordered.map((reading) => reading.temperature);
+  const values = ordered.map((reading) => reading.vibration);
   const minValue = Math.min(...values) - 2;
   const maxValue = Math.max(...values) + 2;
   const chartLeft = 48;
@@ -158,7 +158,7 @@ function drawChart(readings) {
       chartLeft + ((chartRight - chartLeft) / Math.max(ordered.length - 1, 1)) * index;
     const y =
       chartBottom -
-      ((reading.temperature - minValue) / Math.max(maxValue - minValue, 1)) *
+      ((reading.vibration - minValue) / Math.max(maxValue - minValue, 1)) *
         (chartBottom - chartTop);
 
     if (index === 0) {
@@ -175,7 +175,7 @@ function drawChart(readings) {
       chartLeft + ((chartRight - chartLeft) / Math.max(ordered.length - 1, 1)) * index;
     const y =
       chartBottom -
-      ((reading.temperature - minValue) / Math.max(maxValue - minValue, 1)) *
+      ((reading.vibration - minValue) / Math.max(maxValue - minValue, 1)) *
         (chartBottom - chartTop);
 
     ctx.fillStyle = reading.is_anomaly ? "#d64545" : "#0d6b68";
@@ -186,8 +186,8 @@ function drawChart(readings) {
 
   ctx.fillStyle = "#5e6a73";
   ctx.font = "12px Segoe UI";
-  ctx.fillText(`${maxValue.toFixed(1)}°C`, 8, chartTop + 4);
-  ctx.fillText(`${minValue.toFixed(1)}°C`, 8, chartBottom);
+  ctx.fillText(`${maxValue.toFixed(1)} mm/s`, 8, chartTop + 4);
+  ctx.fillText(`${minValue.toFixed(1)} mm/s`, 8, chartBottom);
   ctx.fillText(formatTime(ordered[0].timestamp), chartLeft, canvas.height - 12);
   ctx.fillText(formatTime(ordered[ordered.length - 1].timestamp), chartRight - 54, canvas.height - 12);
 }
