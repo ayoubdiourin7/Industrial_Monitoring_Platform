@@ -15,14 +15,6 @@ MQTT_BROKER_PORT = int(os.getenv("MQTT_BROKER_PORT", "1883"))
 MQTT_TOPIC = os.getenv("MQTT_TOPIC", "factory/+/metrics")
 
 
-def is_anomaly(payload: dict) -> bool:
-    return (
-        payload["vibration"] > 4.5
-        or payload["acoustic"] > 80
-        or payload["power_draw"] > 22
-    )
-
-
 def wait_for_database() -> None:
     for _ in range(30):
         try:
@@ -51,7 +43,6 @@ def on_message(_client: mqtt.Client, _userdata, message: mqtt.MQTTMessage) -> No
         vibration=payload["vibration"],
         acoustic=payload["acoustic"],
         power_draw=payload["power_draw"],
-        is_anomaly=is_anomaly(payload),
         timestamp=timestamp.astimezone(timezone.utc),
     )
 

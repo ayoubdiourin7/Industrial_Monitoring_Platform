@@ -4,7 +4,6 @@ CREATE TABLE IF NOT EXISTS readings (
     vibration DOUBLE PRECISION NOT NULL,
     acoustic DOUBLE PRECISION NOT NULL,
     power_draw DOUBLE PRECISION NOT NULL,
-    is_anomaly BOOLEAN NOT NULL,
     timestamp TIMESTAMPTZ NOT NULL
 );
 

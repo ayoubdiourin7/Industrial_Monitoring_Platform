@@ -13,8 +13,8 @@
           <p class="eyebrow">Mini Industrial Monitoring Platform</p>
           <h1>Live machine health dashboard</h1>
           <p class="hero-copy">
-            Monitor sensor readings, spot anomalies, and inspect one machine in
-            detail from a single screen.
+            Monitor sensor readings and inspect one machine in detail from a
+            single screen.
           </p>
         </div>
         <div class="hero-status">
@@ -51,19 +51,9 @@
           </div>
           <div class="chart-toolbar">
             <select id="machine-select"></select>
-            <span id="selected-machine-status" class="pill">No data</span>
+            <span id="selected-machine-status" class="pill">Waiting</span>
           </div>
           <canvas id="trend-chart" width="720" height="280"></canvas>
-        </section>
-
-        <section class="panel">
-          <div class="panel-heading">
-            <div>
-              <p class="panel-kicker">Alerts</p>
-              <h2>Recent anomalies</h2>
-            </div>
-          </div>
-          <div id="anomaly-list" class="stack-list"></div>
         </section>
       </main>
     </div>

@@ -1,5 +1,4 @@
 const machineCards = document.getElementById("machine-cards");
-const anomalyList = document.getElementById("anomaly-list");
 const machineSelect = document.getElementById("machine-select");
 const fleetPill = document.getElementById("fleet-pill");
 const connectionLabel = document.getElementById("connection-label");
@@ -20,7 +19,6 @@ function formatTime(isoTimestamp) {
 
 function statusForReading(reading) {
   if (!reading) return { label: "No data", className: "status-warning" };
-  if (reading.is_anomaly) return { label: "Alert", className: "status-alert" };
   if (reading.vibration > 3.5 || reading.acoustic > 72 || reading.power_draw > 18) {
     return { label: "Warning", className: "status-warning" };
   }
@@ -93,33 +91,6 @@ function renderMachineOptions(readings) {
   selectedMachineStatus.className = `pill ${status.className}`;
 }
 
-function renderAnomalies(readings) {
-  if (!readings.length) {
-    anomalyList.innerHTML = '<div class="empty-state">No anomalies detected yet.</div>';
-    return;
-  }
-
-  anomalyList.innerHTML = readings
-    .slice(0, 8)
-    .map(
-      (reading) => `
-        <article class="anomaly-item">
-          <div class="anomaly-header">
-            <strong>${reading.machine_id}</strong>
-            <span class="machine-status status-alert">Alert</span>
-          </div>
-          <div class="anomaly-metrics">
-            <span>Vibration ${reading.vibration.toFixed(1)} mm/s</span>
-            <span>Acoustic ${reading.acoustic.toFixed(1)} dB</span>
-            <span>Power ${reading.power_draw.toFixed(1)} kW</span>
-          </div>
-          <p class="machine-timestamp">${formatTime(reading.timestamp)}</p>
-        </article>
-      `,
-    )
-    .join("");
-}
-
 function drawChart(readings) {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -178,7 +149,7 @@ function drawChart(readings) {
       ((reading.vibration - minValue) / Math.max(maxValue - minValue, 1)) *
         (chartBottom - chartTop);
 
-    ctx.fillStyle = reading.is_anomaly ? "#d64545" : "#0d6b68";
+    ctx.fillStyle = "#0d6b68";
     ctx.beginPath();
     ctx.arc(x, y, 4, 0, Math.PI * 2);
     ctx.fill();
@@ -202,15 +173,11 @@ async function fetchJson(path) {
 
 async function refreshDashboard() {
   try {
-    const [latest, anomalies] = await Promise.all([
-      fetchJson("/latest"),
-      fetchJson("/anomalies?limit=8"),
-    ]);
+    const latest = await fetchJson("/latest");
 
     setConnectionState(true);
     renderMachineCards(latest);
     renderMachineOptions(latest);
-    renderAnomalies(anomalies);
 
     if (selectedMachine) {
       const readings = await fetchJson(`/readings?machine_id=${encodeURIComponent(selectedMachine)}&limit=20`);

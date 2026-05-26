@@ -14,5 +14,4 @@ class Reading(Base):
     vibration: Mapped[float] = mapped_column(Float)
     acoustic: Mapped[float] = mapped_column(Float)
     power_draw: Mapped[float] = mapped_column(Float)
-    is_anomaly: Mapped[bool]
     timestamp: Mapped[datetime] = mapped_column(DateTime(timezone=True), index=True)

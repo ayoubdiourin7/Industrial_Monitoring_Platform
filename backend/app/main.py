@@ -119,14 +119,3 @@ def machine_readings(
         .limit(limit)
     )
     return list(session.scalars(statement).all())
-
-
-@app.get("/anomalies", response_model=list[ReadingOut])
-def anomalies(session: Session = Depends(get_session), limit: int = 50) -> list[Reading]:
-    statement = (
-        select(Reading)
-        .where(Reading.is_anomaly.is_(True))
-        .order_by(desc(Reading.timestamp))
-        .limit(limit)
-    )
-    return list(session.scalars(statement).all())

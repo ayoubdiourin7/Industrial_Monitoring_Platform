@@ -29,16 +29,14 @@ Open:
 - `GET /machines`
 - `GET /latest`
 - `GET /readings?machine_id=press-01`
-- `GET /anomalies`
 
 ## Monitoring
 
-- Prometheus scrapes the FastAPI app, PostgreSQL exporter, and node exporter every 15 seconds
+- Prometheus scrapes the FastAPI app and PostgreSQL exporter every 15 seconds
 - Grafana is pre-provisioned with a Prometheus datasource and a starter dashboard
 - The dashboard includes:
   - app uptime, request rate, and p95 latency
   - PostgreSQL exporter health, active connections, transactions, and database size
-  - disk usage percent, total bytes, available bytes, and used bytes
 
 ## Current demo machines
 
