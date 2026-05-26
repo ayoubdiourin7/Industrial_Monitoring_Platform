@@ -18,10 +18,7 @@ function formatTime(isoTimestamp) {
 }
 
 function statusForReading(reading) {
-  if (!reading) return { label: "No data", className: "status-warning" };
-  if (reading.vibration > 3.5 || reading.acoustic > 72 || reading.power_draw > 18) {
-    return { label: "Warning", className: "status-warning" };
-  }
+
   return { label: "OK", className: "status-ok" };
 }
 
